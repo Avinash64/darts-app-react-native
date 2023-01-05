@@ -45,6 +45,7 @@ export default function HomeScreen({ navigation }) {
     const [dpp, setDpp] = React.useState("")
     const [pl, setPl] = React.useState([])
     const [newPlayer, setNewPlayer] = React.useState("new player")
+    const [update, setUpdate] = React.useState("")
 
     // setPl(players)
     console.log(players)
@@ -107,7 +108,7 @@ export default function HomeScreen({ navigation }) {
       
       </View>
       <View style={styles.pright}>
-        <TouchableOpacity onPressOut={() => {players.splice(index, 1); setPl([Math.random()])}}>
+        <TouchableOpacity onPressOut={() => {players.splice(index, 1); setPl([players])}}>
         <Image source={require('../assets/x.png')}
         style={styles.pimages}
         />  
@@ -130,7 +131,7 @@ export default function HomeScreen({ navigation }) {
         />  
     <Text> Add player</Text>
     </TouchableOpacity>
-    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Second", { language: "french" })}>
+    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Gameplay", { players:players })}>
     <Image source={require('../assets/play.png')}
         style={styles.images}
         />  
