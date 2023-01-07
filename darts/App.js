@@ -3,6 +3,7 @@ import Profile from "./screens/profile";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Gameplay from "./screens/gameplay";
+import Summary from "./screens/summary";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -14,7 +15,7 @@ export default function App() {
         
       }}>
       <Stack.Screen 
-        name="Home"
+        name="Setup"
         component={Setup}
         options={{title: "Game Setup"}}
       />
@@ -25,6 +26,10 @@ export default function App() {
       <Stack.Screen 
       name="Gameplay"
       component={Gameplay}
+    />
+      <Stack.Screen 
+      name="Summary"
+      component={Summary}
     />
 
     </Stack.Navigator>

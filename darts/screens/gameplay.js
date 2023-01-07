@@ -5,133 +5,153 @@ import Header from './header';
 import Footer from './footer';
 
 export default function Gameplay({route, navigation}) {
-  const { players } = route.params;
-  const [round, setRound] = React.useState(0)
+  const { game } = route.params;
+  const [turn, setTurn] = React.useState(game.turn);
+  const [round, setRound] = React.useState(game.round);
+  const [vals, setVals] = React.useState({});
+  const [reset, setReset] = React.useState(false)
+  console.log(game.players.length)
+  console.log(game.dartsPerPlayer)
 
-  console.log(players, 1)
+
+  function nextTurn(){
+    if (game.players.length-1 === turn){
+      setRound(round+1);
+      setTurn(0);
+    }
+    else {
+      setTurn(turn + 1)
+    }
+  }
+
+  let darts = []
+  for (let i = 0; i < game.dartsPerPlayer; i++) {
+    darts.push(
+      <View style={styles.dart} key={i}>
+        <Text style={styles.text}>Dart {i+1}:</Text>
+        <TextInput
+        placeholder='#'
+        clearTextOnFocus={true}
+        style={styles.input}
+        keyboardType = 'numeric'
+        maxLength={2}
+        value={vals[i]}
+        onChangeText={(text) => {
+
+          var a = vals
+          vals[i] = text;
+          console.log(vals)
+          console.log(vals[i] ? vals[i] : '', "bruh")
+          setVals(vals);
+          if(reset){
+            setVals({reset: Math.random()})
+            setReset(false)
+          }
+        }}
+        
+        // editable={false}
+        >
+        </TextInput>
+        <TouchableOpacity style={styles.multiplierSelected}><Text style={styles.text}>x1</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.multiplier}><Text style={styles.text}>x2</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.multiplier}><Text style={styles.text}>x3</Text></TouchableOpacity>
+      </View>
+    )
+    
+  }
+
   return (
-    <View style={styles.gameplay}>
-      <Header />
+    <View style={styles.screen}>
+      <Header/>
       <View style={styles.container}>
-      <Text>Profile</Text>
-      {players.map((person, index) => {
-        return (
-          // <Player key={index} name={person.name} style={styles.playerItem}></Player>
-          <View key={index} style={styles.player}>
-      <View style={styles.pleft}>
-        <Image source={require('../assets/player.png')}
-          style={styles.plimages}
-        /> 
-        <Text style={{fontSize:20}}>{person.name ? person.name: "bruh" }</Text>
-      
-      </View>
-      <TouchableOpacity >
-          <Text>Score</Text>
-      </TouchableOpacity>
-      <View style={styles.pright}>
-        <TouchableOpacity onPressOut={() => {players.splice(index, 1); setPl([players])}}>
+        <View style={styles.top}>
+          <Text style={styles.text}>Round {round}</Text>
+          <Text style={styles.text}>{game.players[turn].name}</Text>
+        </View>
+        
+        <View style={styles.middle}>
+          
+          {darts}
+        </View>
 
-        </TouchableOpacity>
-
+        <View style={styles.bottom}>
+          <TouchableOpacity onPressOut={() => {
+                if (game.players.length-1 === turn){
+                  setRound(round+1);
+                  setTurn(0);
+                }
+                else {
+                  setTurn(turn + 1)
+                }
+                darts.forEach(element => {
+                  console.log(element)
+                });
+                setVals({"0": "", "1": "", "2": "","3": ""})
+                console.log(vals)
+                setReset(true)
+          }}>
+            <Text style={styles.text}>{(game.players.length-1 === turn) ? "Next Round":"Next"}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      
+      <Footer/>
     </View>
-        );
-      })}
-      <Text>{JSON.stringify(players)}</Text>
-      </View>
-      <Footer style={styles.footer}/>
-      <StatusBar style="auto" />
-    </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
+    display: "flex",
+    flexDirection: 'column',
+    justifyContent: "space-between",
     height: "91%",
-    display:"flex",
-    flexDirection: 'column',
-    // backgroundColor: 'blue',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    width: "100%"
   },
-  gameplay: {
+  screen: {
     flex: 1,
-    height:"100%",
-    backgroundColor: '#fff',
-    justifyContent: 'space-between', 
-
-  },
-  header:{
-    
-  },roster: {
-    backgroundColor: "#f0ffff",
-    height: "50%",   
-    display:'flex',
-    flexDirection:"column",
-    justifyContent: 'space-evenly',
-    borderStyle: "solid",
-    borderTopWidth: 1
-  },
-
-  input: {
-    borderWidth: 1,
-    width: 150,
-    textAlign: 'center'
-  }, 
-   input2: {
-    borderWidth: 1,
-    textAlign: 'center',
-    height: 30,
-    fontSize: 25
-  },
-  bottomContainer: {
     display: "flex",
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 30
-  },
-  button :{
-    height:100,
-    backgroundColor:"rgb(225, 226, 233)",
-    width: 100,
-    borderRadius: 20,
-    display: "flex",
-    alignItems: 'center',
-    flexDirection:'column',
-    justifyContent: 'center'
-  },
-  player : {
-    backgroundColor: "#84dbdb",
-    display: "flex",
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    maxHeight: "10%",
-    marginHorizontal: "5%",
-    alignItems: 'center'
-
-  },
-  pimages: {
-    height: 40,
-    width: 40
-  },
-  plimages: {
-    height: 50,
-    width: 50
-  },
-  pright: {
-    display: 'flex',
-    flexDirection: 'row'
-  },
-  pleft: {
-    display: 'flex',
     flexDirection: 'column',
+    justifyContent: "space-between",
+    width: "100%"
+  },
+  dart: {
+    display: "flex",
+    flexDirection: "row",
     alignItems: 'center',
+    justifyContent: 'space-between',
+    width: "80%"
   },
-  playerItem: {
+  middle: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: "100%",
+    height: "60%"
   },
-  images:{
-  height:50,
-  width: 50
-}});
+  text: {
+    fontSize: 35,
+    textAlign: 'center'
+  },
+  input: {
+    fontSize: 30,
+    backgroundColor: "#ebebeb",
+    width: "15%",
+    height: "100%",
+    borderColor: "green",
+    borderWidth: 3,
+    borderRadius: 5
+  },
+  multiplier: {
+    borderColor: "green",
+    borderWidth: 3,
+    borderRadius: 5
+  },
+  multiplierSelected: {
+    borderColor: "green",
+    borderWidth: 3,
+    borderRadius: 5,
+    backgroundColor: "#dce4d9",
+  }
+});

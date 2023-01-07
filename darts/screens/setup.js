@@ -4,13 +4,19 @@ import Footer from './footer';
 import Header from './header';
 import { SelectList } from 'react-native-dropdown-select-list';
 import React from 'react';
-import DialogInput from 'react-native-dialog-input';
 
-let players = [
-  // {name: "vas"},
-  // {name: "av"},
-  // {name: "aq"},
-]
+// let players = [
+//   // {name: "vas"},
+//   // {name: "av"},
+//   // {name: "aq"},
+// ]
+
+let game = {
+  players: [],
+  dartsPerPlayer: 3,
+  round: 0,
+  turn: 0
+}
 
  function Player({name}) {
   return (
@@ -40,15 +46,15 @@ let players = [
   )
 }
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({route, navigation}) {
     const [selected, setSelected] = React.useState("")
     const [dpp, setDpp] = React.useState("")
     const [pl, setPl] = React.useState([])
     const [newPlayer, setNewPlayer] = React.useState("new player")
     const [update, setUpdate] = React.useState("")
 
-    // setPl(players)
-    console.log(players)
+    // setPl(game.players)
+    console.log(game.players)
     const data = [
         {key:'1',value:'bruh1'},
         {key:'2',value:'bruh2'},
@@ -82,8 +88,8 @@ export default function HomeScreen({ navigation }) {
       </Pressable>
       <Pressable onPress={() => navigation.navigate("Second", { language: "french" })}>
         <TextInput style={styles.input}
-        
-  keyboardType = 'numeric'
+        onChangeText = {(text)=>{game.dartsPerPlayer = parseInt(text)}}
+        keyboardType = 'numeric'
         placeholder='darts'
         ></TextInput>
       </Pressable>
@@ -93,7 +99,7 @@ export default function HomeScreen({ navigation }) {
       {/* <Text>Roster</Text>
     <Player name={"player"}></Player> */}
     
-      {players.map((person, index) => {
+      {game.players.map((person, index) => {
         return (
           // <Player key={index} name={person.name} style={styles.playerItem}></Player>
           <View key={index} style={styles.player}>
@@ -108,7 +114,7 @@ export default function HomeScreen({ navigation }) {
       
       </View>
       <View style={styles.pright}>
-        <TouchableOpacity onPressOut={() => {players.splice(index, 1); setPl([players])}}>
+        <TouchableOpacity onPressOut={() => {game.players.splice(index, 1); setPl([game.players])}}>
         <Image source={require('../assets/x.png')}
         style={styles.pimages}
         />  
@@ -125,18 +131,18 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.bottomContainer1}>
     <TextInput style={styles.input2} onChangeText = {(text)=>{setNewPlayer(text);}} placeholder="player name"></TextInput>
     <View style={styles.bottomContainer}>
-    <TouchableOpacity style={styles.button} onPress={() => {players.push({name:newPlayer}); console.log(players); setPl([players])}}>
+    <TouchableOpacity style={styles.button} onPress={() => {game.players.push({name:newPlayer, total: 0, scores: []}); console.log(game.players); setPl([game.players])}}>
     <Image source={require('../assets/add.png')}
         style={styles.images}
         />  
     <Text> Add player</Text>
     </TouchableOpacity>
-    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Gameplay", { players:players })}>
+    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Summary", { game:game })}>
     <Image source={require('../assets/play.png')}
         style={styles.images}
-        />  
+        />   
       <Text>Start Game</Text>
-    </TouchableOpacity>
+    </TouchableOpacity> 
     </View>
     </View>
       <StatusBar hidden={true} />
