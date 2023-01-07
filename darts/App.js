@@ -2,6 +2,7 @@ import Setup from "./screens/setup";
 import Profile from "./screens/profile";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+// import Gameplay from "./screens/gc";
 import Gameplay from "./screens/gameplay";
 import Summary from "./screens/summary";
 const Stack = createNativeStackNavigator();

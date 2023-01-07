@@ -9,7 +9,8 @@ export default function Gameplay({route, navigation}) {
   const [turn, setTurn] = React.useState(game.turn);
   const [round, setRound] = React.useState(game.round);
   const [vals, setVals] = React.useState({});
-  const [reset, setReset] = React.useState(false)
+  const [reset, setReset] = React.useState(false);
+  const [sum, setsum] = React.useState([]);
   console.log(game.players.length)
   console.log(game.dartsPerPlayer)
 
@@ -40,8 +41,8 @@ export default function Gameplay({route, navigation}) {
 
           var a = vals
           vals[i] = text;
-          console.log(vals)
           console.log(vals[i] ? vals[i] : '', "bruh")
+          console.log(vals)
           setVals(vals);
           if(reset){
             setVals({reset: Math.random()})
@@ -83,10 +84,19 @@ export default function Gameplay({route, navigation}) {
                 else {
                   setTurn(turn + 1)
                 }
-                darts.forEach(element => {
-                  console.log(element)
-                });
-                setVals({"0": "", "1": "", "2": "","3": ""})
+                // darts.forEach(element => {
+                //   console.log(element)
+                // });
+                console.log(vals,3838)
+                let tot = 0
+                Object.keys(vals).forEach(element =>{
+                  if(element!='reset'){
+                    console.log(vals[element])
+                  tot += parseInt(vals[element])
+                  }
+                })
+                console.log(tot)
+                setVals({"0": "0", "1": "", "2": "","3": ""})
                 console.log(vals)
                 setReset(true)
           }}>
